@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SlideBar">
+        <attr name="bottomColor" format="color"/>
+        <attr name="doRound" format="boolean"/>
+        <attr name="barColor" format="color"/>
+        <attr name="text" format="string"/>
+        <attr name="roundNum" format="dimension"/>
+        <attr name="barLength" format="dimension"/>
+        <attr name="textColor" format="color"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="borderStrong" format="dimension"/>
+        <attr name="borderColor" format="color"/>
+        <attr name="autoBack" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="SlideBarWithText">
+        <attr name="bottomcolor" format="color"/>
+        <attr name="doround" format="boolean"/>
+        <attr name="forecolore" format="enum">
+            <enum name="blue" value="0"/>
+            <enum name="orange" value="1"/>
+        </attr>
+        <attr name="minitext" format="string"/>
+        <attr name="maxitext" format="string"/>
+        <attr name="roundnum" format="dimension"/>
+        <attr name="barresid" format="reference"/>
+        <attr name="solidtextcolor" format="color"/>
+        <attr name="tipstextcolor" format="color"/>
+        <attr name="solidtextsize" format="dimension"/>
+        <attr name="tipstextsize" format="dimension"/>
+        <attr name="borderstrong" format="dimension"/>
+        <attr name="bordercolor" format="color"/>
+        <attr name="tipsresid" format="reference"/>
+        <attr name="paddingHor" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="SlideBarWithText2">
+        <attr name="leftText" format="string"/>
+        <attr name="rightText" format="string"/>
+        <attr name="leftTextColor" format="color"/>
+        <attr name="rightTextColor" format="color"/>
+        <attr name="leftTextSize" format="dimension"/>
+        <attr name="rightTextSize" format="dimension"/>
+        <attr name="tipsTextColor" format="color"/>
+        <attr name="tipsTextSize" format="dimension"/>
+        <attr name="progressBagColor" format="color"/>
+        <attr name="progressColor" format="color"/>
+        <attr name="tipsBag" format="reference"/>
+        <attr name="bar" format="reference"/>
+        <attr name="tipsDefText" format="string"/>
+        <attr name="leftTextBag" format="reference"/>
+        <attr name="rightTextBag" format="reference"/>
+        <attr name="tipFillColor" format="color"/>
+        <attr name="tipStrokeColor" format="color"/>
+        <attr name="tipStrokeWidth" format="dimension"/>
+        <attr name="progressbarHeight" format="dimension"/>
+        <attr name="progressTipDistance" format="dimension"/>
+        <attr name="progressBottomDistance" format="dimension"/>
+    </declare-styleable>
+</resources>
