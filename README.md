@@ -1,7 +1,11 @@
-# slidebar
-example:
-      xml:
-       <com.x.leo.slidebar.SlideBarWithText2 xmlns:app="http://schemas.android.com/apk/res-auto"
+#slidebar
+---
+
+  ***example:***
+
+  **xml:**
+
+      <com.x.leo.slidebar.SlideBarWithText2 xmlns:app="http://schemas.android.com/apk/res-auto"
                   android:id="@+id/sb_term"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
@@ -23,8 +27,10 @@ example:
                   app:tipsDefText="no value"
                   app:tipsTextColor="@color/colorProgress_blue"
                   app:tipsTextSize="@dimen/dp15" />
-       java:
-        final ValueConvertor convertorMoney = new ValueConvertor() {
+
+
+  **java:**
+      final ValueConvertor convertorMoney = new ValueConvertor() {
                    @NotNull
                    @Override
                    public String valueToTipText(double value) {
