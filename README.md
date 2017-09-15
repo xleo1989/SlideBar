@@ -30,7 +30,8 @@
 
 
   **java:**
-      final ValueConvertor convertorMoney = new ValueConvertor() {
+
+        final ValueConvertor convertorMoney = new ValueConvertor() {
                    @NotNull
                    @Override
                    public String valueToTipText(double value) {
