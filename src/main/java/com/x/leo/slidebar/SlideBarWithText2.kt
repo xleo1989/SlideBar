@@ -96,6 +96,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
         parent?.requestDisallowInterceptTouchEvent(true)
         return super.dispatchTouchEvent(event)
     }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val mode = MeasureSpec.getMode(heightMeasureSpec)
         getTipsHeight()
@@ -119,7 +120,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
         progressBagRect = RectF(paddingLeft.toFloat(),
                 middleHight.toFloat() - progressBarHeight / 2, measuredWidth.toFloat() - paddingRight, middleHight.toFloat() + progressBarHeight / 2)
         legalTouchArea = RectF(0f,
-                0f, measuredWidth.toFloat(), measuredHeight.toFloat())
+                paddingTop.toFloat(), measuredWidth.toFloat(), measuredHeight.toFloat() - paddingBottom)
 
         var barDrawableT: Drawable? = null
         if (barDrawable == NORES) {
@@ -154,7 +155,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
     private val localHandler: Handler by lazy {
         Handler(Looper.myLooper())
     }
-    var onDragCallBack:OnSlideDrag? = null
+    var onDragCallBack: OnSlideDrag? = null
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event == null) {
             return false
@@ -186,7 +187,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
             getRealLocation(obtain.x)
             obtainTipText()
             if (onDragCallBack != null && localValueConvertor != null) {
-                onDragCallBack!!.onDraging(this,localValueConvertor!!.valueToProgress(getValue()))
+                onDragCallBack!!.onDraging(this, localValueConvertor!!.valueToProgress(getValue()))
             }
             postInvalidate()
         }
