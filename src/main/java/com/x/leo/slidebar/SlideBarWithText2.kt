@@ -90,6 +90,8 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
             attr.recycle()
         }
         localPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        localPaint.textAlign = Paint.Align.CENTER
+        localPaint.isFakeBoldText = true
     }
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
@@ -302,10 +304,10 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
             val tipDrawableBounds = Rect(
                     location.toInt() - tipsBounds
                             .width() / 2 - textHorPadding,
-                    progressBagRect!!.top.toInt() - progressTipsPadding.toInt() - 2 * textVerticalPadding - tipsBounds.height(),
+                    progressBagRect!!.top.toInt() - progressTipsPadding - 2 * textVerticalPadding - tipsBounds.height(),
                     location.toInt() + tipsBounds
                             .width() / 2 + textHorPadding,
-                    progressBagRect!!.top.toInt() - progressTipsPadding.toInt()
+                    progressBagRect!!.top.toInt() - progressTipsPadding
             )
             var diff = 0
             if (tipDrawableBounds.left < 0) {
@@ -326,8 +328,12 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
             localPaint.color = tipTextColor
             localPaint.style = Paint.Style.FILL_AND_STROKE
             localPaint.strokeWidth = 1f
-            canvas.drawText(tipText.toString(), location - tipsBounds
-                    .width() / 2 + diff, (tipDrawableBounds.bottom.toFloat() + tipDrawableBounds.top) / 2, localPaint)
+            val baseLine = tipDrawableBounds.exactCenterY() + (localPaint.fontMetrics.bottom - localPaint.fontMetrics.top)/2 - localPaint.fontMetrics.bottom
+            if (tipBag != NORES) {
+                canvas.drawText(tipText.toString(), location + diff, baseLine - localPaint.fontMetricsInt.bottom, localPaint)
+            } else {
+                canvas.drawText(tipText.toString(), location  + diff, baseLine - angleHeight.toFloat() / 2, localPaint)
+            }
         }
     }
 
@@ -367,7 +373,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
                         progressBagRect!!.bottom.toInt() + 2 * textVerticalPadding + progressBottomPadding.toInt() + leftTextBounds.height())
                 leftTextDrawable.draw(canvas)
             }
-            canvas.drawText(leftText.toString(), if (leftTextBag == NORES) paddingLeft.toFloat() else paddingLeft + textHorPadding.toFloat(), progressBagRect!!.bottom + progressBottomPadding + leftTextBounds.height() + if (leftTextBag == NORES) 0 else textVerticalPadding, localPaint)
+            canvas.drawText(leftText.toString(), leftTextBounds.width() / 2 + if (leftTextBag == NORES) paddingLeft.toFloat() else paddingLeft + textHorPadding.toFloat() , progressBagRect!!.bottom + progressBottomPadding + leftTextBounds.height() + if (leftTextBag == NORES) 0 else textVerticalPadding, localPaint)
         }
 
         if (!TextUtils.isEmpty(rightText)) {
@@ -385,7 +391,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
                 )
                 rightDrawable.draw(canvas)
             }
-            canvas.drawText(rightText.toString(), measuredWidth.toFloat() - paddingRight - rightTextBounds.width() - if (rightTextBag == NORES) 0 else textHorPadding, progressBagRect!!.bottom + progressBottomPadding + rightTextBounds.height() + if (rightTextBag == NORES) 0 else textVerticalPadding, localPaint)
+            canvas.drawText(rightText.toString(), measuredWidth.toFloat() - paddingRight - rightTextBounds.width()/2 - if (rightTextBag == NORES) 0 else textHorPadding, progressBagRect!!.bottom + progressBottomPadding + rightTextBounds.height() + if (rightTextBag == NORES) 0 else textVerticalPadding, localPaint)
         }
     }
 
