@@ -56,8 +56,8 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
     private var barHeight: Int = 60
     private var dockSize: Int = barWidth
 
-    private var angleHeight = 20
-    private var angleWidth = 30
+    private var angleHeight = (resources.displayMetrics.density * 6).toInt()
+    private var angleWidth = (resources.displayMetrics.density * 8).toInt()
     private var fillColor: Int = Color.GREEN
     private var strokeColor: Int = Color.RED
     private var strokeSize: Int = 10
@@ -87,6 +87,9 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
             progressBottomPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_progressBottomDistance, 10)
             progressTipsPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_progressTipDistance, 10)
             progressBarHeight = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_progressbarHeight, 60)
+            progressRound = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_progressBarRecRadius, 20)
+            textVerticalPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_textVPadding,(resources.displayMetrics.density * 10).toInt())
+            textHorPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_textHPadding,(resources.displayMetrics.density * 15).toInt())
             attr.recycle()
         }
         localPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -328,11 +331,11 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
             localPaint.color = tipTextColor
             localPaint.style = Paint.Style.FILL_AND_STROKE
             localPaint.strokeWidth = 1f
-            val baseLine = tipDrawableBounds.exactCenterY() + (localPaint.fontMetrics.bottom - localPaint.fontMetrics.top)/2 - localPaint.fontMetrics.bottom
+            val baseLine = tipDrawableBounds.exactCenterY() + (localPaint.fontMetrics.bottom - localPaint.fontMetrics.top) / 2 - localPaint.fontMetrics.bottom
             if (tipBag != NORES) {
                 canvas.drawText(tipText.toString(), location + diff, baseLine - localPaint.fontMetricsInt.bottom, localPaint)
             } else {
-                canvas.drawText(tipText.toString(), location  + diff, baseLine - angleHeight.toFloat() / 2, localPaint)
+                canvas.drawText(tipText.toString(), location + diff, baseLine - angleHeight.toFloat() / 2, localPaint)
             }
         }
     }
@@ -373,7 +376,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
                         progressBagRect!!.bottom.toInt() + 2 * textVerticalPadding + progressBottomPadding.toInt() + leftTextBounds.height())
                 leftTextDrawable.draw(canvas)
             }
-            canvas.drawText(leftText.toString(), leftTextBounds.width() / 2 + if (leftTextBag == NORES) paddingLeft.toFloat() else paddingLeft + textHorPadding.toFloat() , progressBagRect!!.bottom + progressBottomPadding + leftTextBounds.height() + if (leftTextBag == NORES) 0 else textVerticalPadding, localPaint)
+            canvas.drawText(leftText.toString(), leftTextBounds.width() / 2 + if (leftTextBag == NORES) paddingLeft.toFloat() else paddingLeft + textHorPadding.toFloat(), progressBagRect!!.bottom + progressBottomPadding + leftTextBounds.height() + if (leftTextBag == NORES) 0 else textVerticalPadding, localPaint)
         }
 
         if (!TextUtils.isEmpty(rightText)) {
@@ -391,7 +394,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
                 )
                 rightDrawable.draw(canvas)
             }
-            canvas.drawText(rightText.toString(), measuredWidth.toFloat() - paddingRight - rightTextBounds.width()/2 - if (rightTextBag == NORES) 0 else textHorPadding, progressBagRect!!.bottom + progressBottomPadding + rightTextBounds.height() + if (rightTextBag == NORES) 0 else textVerticalPadding, localPaint)
+            canvas.drawText(rightText.toString(), measuredWidth.toFloat() - paddingRight - rightTextBounds.width() / 2 - if (rightTextBag == NORES) 0 else textHorPadding, progressBagRect!!.bottom + progressBottomPadding + rightTextBounds.height() + if (rightTextBag == NORES) 0 else textVerticalPadding, localPaint)
         }
     }
 
@@ -408,12 +411,17 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
     }
 
     private fun progressToLocation(progress: Int): Float {
+        if (progressBagRect == null)
+            measure(0, 0)
         return (progressBagRect!!.width() - dockSize) * progress / 100 + progressBagRect!!.left + dockSize / 2
     }
 
     private fun locationToProgress(location: Float): Int {
+        if (progressBagRect == null)
+            measure(0, 0)
         val toInt = ((location - progressBagRect!!.left - dockSize / 2) / (progressBagRect!!.width() - dockSize) * 100).toInt()
         return if (toInt > 100) 100 else if (toInt < 0) 0 else toInt
+
     }
 }
 
