@@ -88,8 +88,8 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
             progressTipsPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_progressTipDistance, 10)
             progressBarHeight = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_progressbarHeight, 60)
             progressRound = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_progressBarRecRadius, 20)
-            textVerticalPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_textVPadding,(resources.displayMetrics.density * 10).toInt())
-            textHorPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_textHPadding,(resources.displayMetrics.density * 15).toInt())
+            textVerticalPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_textVPadding, (resources.displayMetrics.density * 10).toInt())
+            textHorPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_textHPadding, (resources.displayMetrics.density * 15).toInt())
             attr.recycle()
         }
         localPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -344,13 +344,13 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
         val path = Path()
         val bottom = progressBagRect!!.top - progressTipsPadding
         path.moveTo(location, bottom)
-        path.lineTo(location + angleWidth / 2, bottom - angleHeight)
-        path.lineTo(tipDrawableBounds.right.toFloat(), bottom - angleHeight)
-        path.lineTo(tipDrawableBounds.right.toFloat(), tipDrawableBounds.top.toFloat())
-        path.lineTo(tipDrawableBounds.left.toFloat(), tipDrawableBounds.top.toFloat())
-        path.lineTo(tipDrawableBounds.left.toFloat(), bottom - angleHeight)
-        path.lineTo(location - angleWidth / 2, bottom - angleHeight)
-        path.lineTo(location, bottom)
+        path.lineTo(location + angleWidth / 2, bottom - angleHeight - strokeSize.toFloat() / 2)
+        path.lineTo(tipDrawableBounds.right.toFloat() - strokeSize.toFloat() / 2, bottom - angleHeight - strokeSize.toFloat() / 2)
+        path.lineTo(tipDrawableBounds.right.toFloat() - strokeSize.toFloat() / 2, tipDrawableBounds.top.toFloat() + strokeSize.toFloat() / 2)
+        path.lineTo(tipDrawableBounds.left.toFloat() + strokeSize.toFloat() / 2, tipDrawableBounds.top.toFloat() + strokeSize.toFloat() / 2)
+        path.lineTo(tipDrawableBounds.left.toFloat() + strokeSize.toFloat() / 2, bottom - angleHeight - strokeSize.toFloat() / 2)
+        path.lineTo(location - angleWidth / 2, bottom - angleHeight - strokeSize.toFloat() / 2)
+        path.lineTo(location, bottom - strokeSize.toFloat() / 2)
         path.close()
         localPaint.color = fillColor
         localPaint.strokeWidth = strokeSize.toFloat()
@@ -358,6 +358,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
         canvas.drawPath(path, localPaint)
         localPaint.color = strokeColor
         localPaint.style = Paint.Style.STROKE
+
         canvas.drawPath(path, localPaint)
     }
 
