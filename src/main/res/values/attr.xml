@@ -57,7 +57,7 @@
         <attr name="progressTipDistance" format="dimension"/>
         <attr name="progressBottomDistance" format="dimension"/>
         <attr name="progressBarRecRadius" format="dimension"/>
-        <attr name="textVPadding" format="dimension"/>
-        <attr name="textHPadding" format="dimension"/>
+        <attr name="tipsTextVPadding" format="dimension"/>
+        <attr name="tipsTextHPadding" format="dimension"/>
     </declare-styleable>
 </resources>

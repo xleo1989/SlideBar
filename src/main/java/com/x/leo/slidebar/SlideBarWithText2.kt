@@ -88,8 +88,8 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
             progressTipsPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_progressTipDistance, 10)
             progressBarHeight = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_progressbarHeight, 60)
             progressRound = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_progressBarRecRadius, 20)
-            textVerticalPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_textVPadding, (resources.displayMetrics.density * 10).toInt())
-            textHorPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_textHPadding, (resources.displayMetrics.density * 15).toInt())
+            textVerticalPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_tipsTextVPadding, (resources.displayMetrics.density * 10).toInt())
+            textHorPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_tipsTextHPadding, (resources.displayMetrics.density * 15).toInt())
             attr.recycle()
         }
         localPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -121,7 +121,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
         if (tipsHeight + bottomHeight + progressBarHeight + paddingTop + paddingBottom + progressBottomPadding + progressTipsPadding > measuredHeight) {
             throw IllegalArgumentException("the height is too small to content this view")
         }
-        val middleHight = measuredHeight / 2
+        val middleHight = tipsHeight + progressBarHeight/2 + paddingTop + progressTipsPadding
         progressBagRect = RectF(paddingLeft.toFloat(),
                 middleHight.toFloat() - progressBarHeight / 2, measuredWidth.toFloat() - paddingRight, middleHight.toFloat() + progressBarHeight / 2)
         legalTouchArea = RectF(0f,
@@ -148,13 +148,13 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
         localPaint.textSize = rightTextSize.toFloat()
         val rightMetrics = localPaint.getFontMetrics()
         val rightHeight = rightMetrics.bottom - rightMetrics.top
-        bottomHeight = if (rightHeight > leftHeight) rightHeight + textVerticalPadding * 2 else leftHeight + textVerticalPadding * 2
+        bottomHeight = if (rightHeight > leftHeight) rightHeight  else leftHeight
     }
 
     private fun getTipsHeight() {
         localPaint.textSize = tipTextSize.toFloat()
         val fontMetrics = localPaint.getFontMetrics()
-        tipsHeight = fontMetrics.bottom - fontMetrics.top + textVerticalPadding * 2
+        tipsHeight = fontMetrics.bottom - fontMetrics.top + textVerticalPadding * 2 + 2 * strokeSize
     }
 
     private val localHandler: Handler by lazy {
