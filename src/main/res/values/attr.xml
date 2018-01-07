@@ -45,6 +45,7 @@
         <attr name="tipsTextSize" format="dimension"/>
         <attr name="progressBagColor" format="color"/>
         <attr name="progressColor" format="color"/>
+        <attr name="progressColorEnd" format="color"/>
         <attr name="tipsBag" format="reference"/>
         <attr name="bar" format="reference"/>
         <attr name="tipsDefText" format="string"/>
@@ -59,5 +60,6 @@
         <attr name="progressBarRecRadius" format="dimension"/>
         <attr name="tipsTextVPadding" format="dimension"/>
         <attr name="tipsTextHPadding" format="dimension"/>
+        <attr name="tipsRoundSize" format="dimension"/>
     </declare-styleable>
 </resources>

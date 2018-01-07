@@ -61,6 +61,9 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
     private var fillColor: Int = Color.GREEN
     private var strokeColor: Int = Color.RED
     private var strokeSize: Int = 10
+    private var mRoundCornerSize: Float = 0f
+
+    private var progressColorEnd: Int = -1
 
     init {
         if (attrs != null) {
@@ -71,6 +74,11 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
             tipTextSize = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_tipsTextSize, 24)
             progressBarBag = attr.getColor(R.styleable.SlideBarWithText2_progressBagColor, Color.BLACK)
             progressColor = attr.getColor(R.styleable.SlideBarWithText2_progressColor, Color.GREEN)
+            progressColorEnd = if (attr.hasValue(R.styleable.SlideBarWithText2_progressColorEnd)) {
+                attr.getColor(R.styleable.SlideBarWithText2_progressColorEnd, Color.CYAN)
+            }else{
+                -1
+            }
             barDrawable = attr.getResourceId(R.styleable.SlideBarWithText2_bar, NORES)
             leftText = attr.getText(R.styleable.SlideBarWithText2_leftText)
             rightText = attr.getText(R.styleable.SlideBarWithText2_rightText)
@@ -90,6 +98,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
             progressRound = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_progressBarRecRadius, 20)
             textVerticalPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_tipsTextVPadding, (resources.displayMetrics.density * 10).toInt())
             textHorPadding = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_tipsTextHPadding, (resources.displayMetrics.density * 15).toInt())
+            mRoundCornerSize = attr.getDimensionPixelSize(R.styleable.SlideBarWithText2_tipsRoundSize,0).toFloat()
             attr.recycle()
         }
         localPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -121,7 +130,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
         if (tipsHeight + bottomHeight + progressBarHeight + paddingTop + paddingBottom + progressBottomPadding + progressTipsPadding > measuredHeight) {
             throw IllegalArgumentException("the height is too small to content this view")
         }
-        val middleHight = tipsHeight + progressBarHeight/2 + paddingTop + progressTipsPadding
+        val middleHight = tipsHeight + progressBarHeight / 2 + paddingTop + progressTipsPadding
         progressBagRect = RectF(paddingLeft.toFloat(),
                 middleHight.toFloat() - progressBarHeight / 2, measuredWidth.toFloat() - paddingRight, middleHight.toFloat() + progressBarHeight / 2)
         legalTouchArea = RectF(0f,
@@ -148,7 +157,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
         localPaint.textSize = rightTextSize.toFloat()
         val rightMetrics = localPaint.getFontMetrics()
         val rightHeight = rightMetrics.bottom - rightMetrics.top
-        bottomHeight = if (rightHeight > leftHeight) rightHeight  else leftHeight
+        bottomHeight = if (rightHeight > leftHeight) rightHeight else leftHeight
     }
 
     private fun getTipsHeight() {
@@ -340,15 +349,45 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
         }
     }
 
+
+
     private fun drawDefaultTipDrawable(canvas: Canvas, tipDrawableBounds: Rect) {
+        if (mRoundCornerSize * 2 > tipDrawableBounds.height())
+            mRoundCornerSize = tipDrawableBounds.height().toFloat() / 2
+        if (mRoundCornerSize * 2 > tipDrawableBounds.width())
+            mRoundCornerSize = tipDrawableBounds.width().toFloat() / 2
         val path = Path()
         val bottom = progressBagRect!!.top - progressTipsPadding
         path.moveTo(location, bottom)
         path.lineTo(location + angleWidth / 2, bottom - angleHeight - strokeSize.toFloat() / 2)
-        path.lineTo(tipDrawableBounds.right.toFloat() - strokeSize.toFloat() / 2, bottom - angleHeight - strokeSize.toFloat() / 2)
-        path.lineTo(tipDrawableBounds.right.toFloat() - strokeSize.toFloat() / 2, tipDrawableBounds.top.toFloat() + strokeSize.toFloat() / 2)
-        path.lineTo(tipDrawableBounds.left.toFloat() + strokeSize.toFloat() / 2, tipDrawableBounds.top.toFloat() + strokeSize.toFloat() / 2)
-        path.lineTo(tipDrawableBounds.left.toFloat() + strokeSize.toFloat() / 2, bottom - angleHeight - strokeSize.toFloat() / 2)
+        path.lineTo(tipDrawableBounds.right.toFloat() - strokeSize.toFloat() / 2 - mRoundCornerSize, bottom - angleHeight - strokeSize.toFloat() / 2)
+        if (mRoundCornerSize > 0) {
+            path.quadTo(tipDrawableBounds.right.toFloat() - strokeSize.toFloat() / 2
+                    , bottom - angleHeight - strokeSize.toFloat() / 2
+                    , tipDrawableBounds.right.toFloat() - strokeSize.toFloat() / 2
+                    , bottom - angleHeight - strokeSize.toFloat() / 2 - mRoundCornerSize)
+        }
+        path.lineTo(tipDrawableBounds.right.toFloat() - strokeSize.toFloat() / 2, tipDrawableBounds.top.toFloat() + strokeSize.toFloat() / 2 + mRoundCornerSize)
+        if (mRoundCornerSize > 0) {
+            path.quadTo(tipDrawableBounds.right.toFloat() - strokeSize.toFloat() / 2
+                    , tipDrawableBounds.top.toFloat() + strokeSize.toFloat() / 2
+                    , tipDrawableBounds.right.toFloat() - strokeSize.toFloat() / 2 - mRoundCornerSize
+                    , tipDrawableBounds.top.toFloat() + strokeSize.toFloat() / 2)
+        }
+        path.lineTo(tipDrawableBounds.left.toFloat() + strokeSize.toFloat() / 2 + mRoundCornerSize, tipDrawableBounds.top.toFloat() + strokeSize.toFloat() / 2)
+        if (mRoundCornerSize > 0) {
+            path.quadTo(tipDrawableBounds.left.toFloat() + strokeSize.toFloat() / 2
+                    , tipDrawableBounds.top.toFloat() + strokeSize.toFloat() / 2
+                    , tipDrawableBounds.left.toFloat() + strokeSize.toFloat() / 2
+                    , tipDrawableBounds.top.toFloat() + strokeSize.toFloat() / 2 + mRoundCornerSize)
+        }
+        path.lineTo(tipDrawableBounds.left.toFloat() + strokeSize.toFloat() / 2, bottom - angleHeight - strokeSize.toFloat() / 2 - mRoundCornerSize)
+        if (mRoundCornerSize > 0) {
+            path.quadTo(tipDrawableBounds.left.toFloat() + strokeSize.toFloat() / 2
+                    , bottom - angleHeight - strokeSize.toFloat() / 2
+                    , tipDrawableBounds.left.toFloat() + strokeSize.toFloat() / 2 + mRoundCornerSize
+                    , bottom - angleHeight - strokeSize.toFloat() / 2)
+        }
         path.lineTo(location - angleWidth / 2, bottom - angleHeight - strokeSize.toFloat() / 2)
         path.lineTo(location, bottom - strokeSize.toFloat() / 2)
         path.close()
@@ -358,7 +397,6 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
         canvas.drawPath(path, localPaint)
         localPaint.color = strokeColor
         localPaint.style = Paint.Style.STROKE
-
         canvas.drawPath(path, localPaint)
     }
 
@@ -403,12 +441,19 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
         localPaint.color = progressColor
         if (location > progressBagRect!!.left + dockSize / 2 && location <= progressBagRect!!.right) {
             progressRect = RectF(progressBagRect!!.left, progressBagRect!!.top, location, progressBagRect!!.bottom)
+            if (progressColorEnd != -1) {
+                localPaint.shader = LinearGradient(progressRect!!.left,progressRect!!.centerY(),progressRect!!.right,progressRect!!.centerY(),progressColor,progressColorEnd,Shader.TileMode.CLAMP)
+            }
             canvas.drawRoundRect(progressRect, progressRound.toFloat(), progressRound.toFloat(), localPaint)
         } else if (location <= progressBagRect!!.left + dockSize / 2) {
         } else {
             progressRect = RectF(progressBagRect!!.left, progressBagRect!!.top, progressBagRect!!.right, progressBagRect!!.bottom)
+            if (progressColorEnd != -1) {
+                localPaint.shader = LinearGradient(progressRect!!.left,progressRect!!.centerY(),progressRect!!.right,progressRect!!.centerY(),progressColor,progressColorEnd,Shader.TileMode.CLAMP)
+            }
             canvas.drawRoundRect(progressRect, progressRound.toFloat(), progressRound.toFloat(), localPaint)
         }
+        localPaint.shader = null
     }
 
     private fun progressToLocation(progress: Int): Float {
