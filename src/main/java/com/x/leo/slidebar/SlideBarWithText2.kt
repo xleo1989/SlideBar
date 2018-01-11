@@ -64,7 +64,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
     private var mRoundCornerSize: Float = 0f
 
     private var progressColorEnd: Int = -1
-
+    var alterable = true
     init {
         if (attrs != null) {
             val attr = ctx.obtainStyledAttributes(attrs, R.styleable.SlideBarWithText2)
@@ -171,7 +171,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
     }
     var onDragCallBack: OnSlideDrag? = null
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (event == null) {
+        if (event == null && !alterable) {
             return false
         }
         val obtain = MotionEvent.obtain(event)
@@ -253,6 +253,7 @@ class SlideBarWithText2(ctx: Context, attrs: AttributeSet?) : View(ctx, attrs) {
             location = progressToLocation(progress)
             obtainTipText()
             invalidate()
+            onDragCallBack?.onDraging(this,progress)
         }
     }
 
